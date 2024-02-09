@@ -13,7 +13,6 @@ ser = serial.Serial('/dev/ttyTHS1', 115200)  # Ajusta el nombre del puerto seria
 
 #obtención del archivo Json 
 datos1 = pd.read_json('/home/estacioniot/Desktop/conectionEsp/Video_01.json') #se obtiene el archivo como dataframe
-#dato_envio = datos1.iloc[-1]
 datos = datos1.to_json()  #se pasa el archivo completo a Json
 
 #otra manera de pasar el archivo a json
