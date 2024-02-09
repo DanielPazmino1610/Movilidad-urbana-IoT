@@ -1,5 +1,5 @@
 #Codigo para la recepción de datos por UART desde una ESP32 
-#El codigo sirve para la recepción de 
+#El codigo sirve para la recepción de datos por el puerto UART
 #Autor Daniel Pazmiño Ortega 
 
 
