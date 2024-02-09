@@ -1,8 +1,7 @@
 /* Codigo que recibe un archivo Json desde la Jetson nano hasta una ESP32
 con la opción de modificar los datos o no, para continuar con la transmisión del archivo
 json 
-Transmisión y Recepción de un mnesaje simple
-- Autor: Daniel Enrique Pazmiño Ortega
+- Autor: Daniel Enrique Pazmiño Ortega 
 */
 
 // Se incluyen las librerías para la manipulación de archivos 
