@@ -105,7 +105,7 @@ void setup() {
     while (1);
   }
   //Se ingresa una palabra de sincronización para evitar la interceptacion de la información 
-  //LoRa.setSyncWord(0xB7); //palabra de sincronización
+  LoRa.setSyncWord(0xB7); //palabra de sincronización
 
   //Linear calibration
   ina219.linearCalibrate(ina219Reading_mA, extMeterReading_mA);
