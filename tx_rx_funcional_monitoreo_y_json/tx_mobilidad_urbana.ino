@@ -150,7 +150,7 @@ void mandarLora(){ // funcion de empaquetmiento y envío LoRa
   LoRa.beginPacket(); // abre el paquete
  
   LoRa.print(json); 
-  serializeJson(package,LoRa); // envía el paquete 
+  //serializeJson(package,LoRa); // envía el paquete 
 
   LoRa.endPacket(); // cierra el paquete
 }
