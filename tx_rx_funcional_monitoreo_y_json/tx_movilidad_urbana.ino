@@ -10,11 +10,12 @@ en un archivo json y estransmitido por LoRa al gateway
 //-----------------------------------------------------------------------------------------------------------------------------------
 //                                                              LIBRERÍAS
 
-// Se incluyen las librerías para la manipulación de archivos 
+// Se incluyen las librerías para la manipulación de archivos y variables
 
 
 //#include <FS.h>   // manipulación de archivos en ESP32
 #include <ArduinoJson.h>    // manipulacion de archivos Json
+#include <stdlib.h> // casteo de str a int para la variable id_counters
 
 // Se incluye la librería para el envio de datos json a traves de comunicación LoRa
 #include <SPI.h>
@@ -42,7 +43,8 @@ PZEM004Tv30 pzem(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN);
 DynamicJsonDocument package(256);
 String json;
 float FPS;
-long Id_count;
+char Id_count[8];
+const char* Id_count_str;
 const char* timeString;
 char Time[7];
 
@@ -67,19 +69,19 @@ float extMeterReading_mA = 1000;
 // Creación de variables para el monitoreo electrico
 // DC
 
-float BusVoltageDC;
-float ShuntVoltageDC;
-float CurrentDC;
-float PowerDC;
+float BusVoltageDC=0;
+float ShuntVoltageDC=0;
+float CurrentDC=0;
+float PowerDC=0;
 #define r_shunt 0.1 
 
 //AC
-float voltage;
-float current;
-float power ;
-float energy ;
-float frequency ;
-float pf ;
+float voltage=0;
+float current=0;
+float power =0;
+float energy =0;
+float frequency =0;
+float pf =0;
 
 
 
@@ -105,7 +107,7 @@ void setup() {
     while (1);
   }
   //Se ingresa una palabra de sincronización para evitar la interceptacion de la información 
-  LoRa.setSyncWord(0xB7); //palabra de sincronización
+  //LoRa.setSyncWord(0xB7); //palabra de sincronización
 
   //Linear calibration
   ina219.linearCalibrate(ina219Reading_mA, extMeterReading_mA);
@@ -129,11 +131,13 @@ void loop() {
     // se extrae las caracteristicas de interes del archivo json 
     FPS = doc["FPS"];
     timeString = doc["Time"];
-    Id_count = doc["Id_count"];
+    Id_count_str = doc["Id_count"];
     strcpy(Time,timeString); // se obtiene el tiempo en formato str
+    strcpy(Id_count,Id_count_str);
     
     // se sacan las variables electricas 
-    obtenerDC();
+    //obtenerDC();
+    
     obtenerAC1();
 
     // se empaqueta en un archivo json
@@ -141,7 +145,7 @@ void loop() {
 
     // se transmite por comunicación LoRa
     mandarLora();
-  }
+  }  
 
 }
 
@@ -177,7 +181,8 @@ void obtenerAC1(){ // se obtienen las variables ac  con el sensor pzem004t v3
 
 void montar_json(){  // se empaqueta todos los datos en un archivo json dinamico 
   package["FPS"] = FPS;
-  package["Id_count"] = Id_count;
+  int numero = atoi(Id_count);
+  package["Id_count"] = numero;
   package["Time"] = Time;
   package["VolAC"] = voltage;
   package["currAC"] = current;
@@ -190,5 +195,5 @@ void montar_json(){  // se empaqueta todos los datos en un archivo json dinamico
   package["PowDC"] = PowerDC;
 
   serializeJson(package,json); // se lo pasa a cadena 
-  Serial2.println(json); // y se imprime para revisarlo
+  //Serial2.println(json); // y se imprime para revisarlo
 }
